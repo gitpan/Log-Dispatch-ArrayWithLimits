@@ -7,12 +7,17 @@ use strict;
 use parent qw(Log::Dispatch::Output);
 
 our $DATE = '2014-07-06'; # DATE
-our $VERSION = '0.01'; # VERSION
+our $VERSION = '0.02'; # VERSION
 
 sub new {
     my ($class, %args) = @_;
     my $self = {};
     $self->{array} = $args{array} // [];
+    if (!ref($self->{array})) {
+        no strict 'refs';
+        say "$self->{array}";
+        $self->{array} = \@{"$self->{array}"};
+    }
     bless $self, $class;
     $self->_basic_init(%args);
     $self;
@@ -22,7 +27,7 @@ sub log_message {
     my $self = shift;
     my %args = @_;
 
-    push @{$self->{_array}}, $args{message};
+    push @{$self->{array}}, $args{message};
 
     if (defined($self->{max_elems}) && @{$self->{array}} > $self->{max_elems}) {
         splice(@{$self->{array}}, 0, @{$self->{array}}-$self->{max_elems});
@@ -44,7 +49,7 @@ Log::Dispatch::ArrayWithLimits - Log to array, with some limits applied
 
 =head1 VERSION
 
-This document describes version 0.01 of Log::Dispatch::ArrayWithLimits (from Perl distribution Log-Dispatch-ArrayWithLimits), released on 2014-07-06.
+This document describes version 0.02 of Log::Dispatch::ArrayWithLimits (from Perl distribution Log-Dispatch-ArrayWithLimits), released on 2014-07-06.
 
 =head1 SYNOPSIS
 
@@ -52,7 +57,7 @@ This document describes version 0.01 of Log::Dispatch::ArrayWithLimits (from Per
 
  my $file = Log::Dispatch::ArrayWithLimits(
      min_level     => 'info',
-     array         => $ary,    # default: []
+     array         => $ary,    # default: [], you can always refer by name e.g. 'My::array' to refer to @My::array
      max_elems     => 100,     # defaults unlimited
  );
 
@@ -60,9 +65,24 @@ This document describes version 0.01 of Log::Dispatch::ArrayWithLimits (from Per
 
 =head1 DESCRIPTION
 
-This module functions similarly to L<Log::Dispatch::Array>, except that only the
-messages are stored and there are some limits applied (currently only the
-maximum number of elements in the array).
+This module functions similarly to L<Log::Dispatch::Array>, with a few
+differences:
+
+=over
+
+=item * only the messages (strings) are stored
+
+=item * allow specifying array variable name (e.g. "My::array" instead of \@My:array)
+
+This makes it possible to use in L<Log::Log4perl> configuration, which is a text
+file.
+
+=item * can apply some limits
+
+Currently only max_elems (the maximum number of elements in the array) is
+available. Future limits will be added (see L</"TODO">).
+
+=back
 
 Logging to an in-process array can be useful when debugging/testing, or when you
 want to let users of your program connect to your program to request viewing the
@@ -74,7 +94,10 @@ ogs being produced.
 
 Constructor. This method takes a hash of parameters. The following options are
 valid: C<min_level> and C<max_level> (see L<Log::Dispatch> documentation);
-C<array>, C<max_elems>.
+C<array> (a reference to an array, or if value is string, will be taken as name
+of array variable; this is so this module can be used/configured e.g. by
+L<Log::Log4perl> because configuration is specified via a text file),
+C<max_elems>.
 
 =head2 log_message(message => STR)
 
