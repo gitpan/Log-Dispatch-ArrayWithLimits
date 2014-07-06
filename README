@@ -2,7 +2,7 @@ NAME
     Log::Dispatch::ArrayWithLimits - Log to array, with some limits applied
 
 VERSION
-    This document describes version 0.02 of Log::Dispatch::ArrayWithLimits
+    This document describes version 0.03 of Log::Dispatch::ArrayWithLimits
     (from Perl distribution Log-Dispatch-ArrayWithLimits), released on
     2014-07-06.
 

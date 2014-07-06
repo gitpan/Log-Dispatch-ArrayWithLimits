@@ -7,7 +7,7 @@ use strict;
 use parent qw(Log::Dispatch::Output);
 
 our $DATE = '2014-07-06'; # DATE
-our $VERSION = '0.02'; # VERSION
+our $VERSION = '0.03'; # VERSION
 
 sub new {
     my ($class, %args) = @_;
@@ -18,6 +18,7 @@ sub new {
         say "$self->{array}";
         $self->{array} = \@{"$self->{array}"};
     }
+    $self->{max_elems} = $args{max_elems} // undef;
     bless $self, $class;
     $self->_basic_init(%args);
     $self;
@@ -30,7 +31,11 @@ sub log_message {
     push @{$self->{array}}, $args{message};
 
     if (defined($self->{max_elems}) && @{$self->{array}} > $self->{max_elems}) {
-        splice(@{$self->{array}}, 0, @{$self->{array}}-$self->{max_elems});
+        # splice() is not supported for threads::shared-array, so we use
+        # repeated shift
+        while (@{$self->{array}} > $self->{max_elems}) {
+            shift @{$self->{array}};
+        }
     }
 }
 
@@ -49,7 +54,7 @@ Log::Dispatch::ArrayWithLimits - Log to array, with some limits applied
 
 =head1 VERSION
 
-This document describes version 0.02 of Log::Dispatch::ArrayWithLimits (from Perl distribution Log-Dispatch-ArrayWithLimits), released on 2014-07-06.
+This document describes version 0.03 of Log::Dispatch::ArrayWithLimits (from Perl distribution Log-Dispatch-ArrayWithLimits), released on 2014-07-06.
 
 =head1 SYNOPSIS
 
