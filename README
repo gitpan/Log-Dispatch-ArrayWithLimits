@@ -1,0 +1,74 @@
+NAME
+    Log::Dispatch::ArrayWithLimits - Log to array, with some limits applied
+
+VERSION
+    This document describes version 0.01 of Log::Dispatch::ArrayWithLimits
+    (from Perl distribution Log-Dispatch-ArrayWithLimits), released on
+    2014-07-06.
+
+SYNOPSIS
+     use Log::Dispatch::ArrayWithLimits;
+
+     my $file = Log::Dispatch::ArrayWithLimits(
+         min_level     => 'info',
+         array         => $ary,    # default: []
+         max_elems     => 100,     # defaults unlimited
+     );
+
+     $file->log(level => 'info', message => "Your comment\n");
+
+DESCRIPTION
+    This module functions similarly to Log::Dispatch::Array, except that
+    only the messages are stored and there are some limits applied
+    (currently only the maximum number of elements in the array).
+
+    Logging to an in-process array can be useful when debugging/testing, or
+    when you want to let users of your program connect to your program to
+    request viewing the ogs being produced.
+
+METHODS
+  new(%args)
+    Constructor. This method takes a hash of parameters. The following
+    options are valid: "min_level" and "max_level" (see Log::Dispatch
+    documentation); "array", "max_elems".
+
+  log_message(message => STR)
+    Send a message to the appropriate output. Generally this shouldn't be
+    called directly but should be called through the "log()" method (in
+    LLog::Dispatch::Output>).
+
+TODO
+    max_total_len
+
+    max_age
+
+SEE ALSO
+    Log::Dispatch
+
+    Log::Dispatch::Array
+
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Log-Dispatch-ArrayWithLimits>.
+
+SOURCE
+    Source repository is at
+    <https://github.com/sharyanto/perl-Log-Dispatch-ArrayWithLimits>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    <https://rt.cpan.org/Public/Dist/Display.html?Name=Log-Dispatch-ArrayWit
+    hLimits>
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
+
+AUTHOR
+    Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2014 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
