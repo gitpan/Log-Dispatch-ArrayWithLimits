@@ -6,8 +6,8 @@ use strict;
 
 use parent qw(Log::Dispatch::Output);
 
-our $DATE = '2014-07-06'; # DATE
-our $VERSION = '0.03'; # VERSION
+our $DATE = '2015-01-03'; # DATE
+our $VERSION = '0.04'; # VERSION
 
 sub new {
     my ($class, %args) = @_;
@@ -54,7 +54,7 @@ Log::Dispatch::ArrayWithLimits - Log to array, with some limits applied
 
 =head1 VERSION
 
-This document describes version 0.03 of Log::Dispatch::ArrayWithLimits (from Perl distribution Log-Dispatch-ArrayWithLimits), released on 2014-07-06.
+This document describes version 0.04 of Log::Dispatch::ArrayWithLimits (from Perl distribution Log-Dispatch-ArrayWithLimits), released on 2015-01-03.
 
 =head1 SYNOPSIS
 
@@ -85,7 +85,7 @@ file.
 =item * can apply some limits
 
 Currently only max_elems (the maximum number of elements in the array) is
-available. Future limits will be added (see L</"TODO">).
+available. Future limits will be added.
 
 =back
 
@@ -109,12 +109,6 @@ C<max_elems>.
 Send a message to the appropriate output. Generally this shouldn't be called
 directly but should be called through the C<log()> method (in
 LLog::Dispatch::Output>).
-
-=head1 TODO
-
-max_total_len
-
-max_age
 
 =head1 SEE ALSO
 
@@ -140,11 +134,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2015 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
